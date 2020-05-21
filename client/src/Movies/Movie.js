@@ -4,12 +4,13 @@ import { useParams, useHistory } from "react-router-dom";
 import MovieCard from "./MovieCard";
 // import UpdateForm from "./UpdateForm";
 
-function Movie({ addToSavedList }) {
+function Movie({ addToSavedList, movieList, setMovieList }) {
   const [movie, setMovie] = useState(null);
   const params = useParams();
   const { push } = useHistory();
   const { id } = useParams();
 
+  // console.log("ATSL", movieList);
   const fetchMovie = (id) => {
     axios
       .get(`http://localhost:5000/api/movies/${id}`)
@@ -34,13 +35,9 @@ function Movie({ addToSavedList }) {
     axios
       .delete(`http://localhost:5000/api/movies/${id}`)
       .then(res => {
-        // res.data
-        // props.setMovie(res.data);
+        const newList = movieList.filter(movie => movie.id !== res.data)
+        setMovieList(newList)
         push('/');
-
-        // res.data ==> just the id
-        // const newItems = props.items.filter(v => `${v.id}` !== res.data)
-        // props.setItems(newItems)
       })
       .catch(err => console.log(err));
   };
@@ -48,7 +45,6 @@ function Movie({ addToSavedList }) {
   return (
     <div className="save-wrapper">
       <MovieCard movie={movie} />
-
       <div className="save-button" onClick={saveMovie}>
         Save
       </div>

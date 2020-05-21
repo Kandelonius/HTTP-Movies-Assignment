@@ -50,7 +50,8 @@ const UpdateForm = props => {
             .then(res => {
                 console.log('item', item);
                 setItem(res.data);
-                // props.setMovie(res.data);
+                const newList = props.movieList.filter(movie => movie.id !== res.data)
+                props.setMovieList(newList)
                 push("/");
             })
             .catch(err => console.log(err));
