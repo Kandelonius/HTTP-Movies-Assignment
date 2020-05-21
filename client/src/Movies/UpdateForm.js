@@ -48,10 +48,24 @@ const UpdateForm = props => {
         axios
             .put(`http://localhost:5000/api/movies/${id}`, item)
             .then(res => {
-                console.log('item', item);
+                // console.log('item', props.movieList);
+                // console.log('res', res.data);
+                // build new array
+                // loop through old array
+                // find the item that matches the updated one
+                // update that item in the new array
+                // then set the new array.
+
                 setItem(res.data);
-                const newList = props.movieList.filter(movie => movie.id !== res.data)
-                props.setMovieList(newList)
+                // const newList = props.movieList.map(movie => {
+                //     console.log('m', movie)
+                //     if (movie.id === res.data.id) {
+                //         newList.push({ item });
+                //     } else {
+                //         newList.push({ movie });
+                //     }
+                // });
+                // props.setMovieList(newList)
                 push("/");
             })
             .catch(err => console.log(err));
