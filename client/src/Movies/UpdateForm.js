@@ -12,7 +12,6 @@ import axios from 'axios';
 //   }
 
 const initialItem = {
-    id: "",
     title: "",
     director: "",
     metascore: "",
@@ -22,69 +21,73 @@ const initialItem = {
 
 
 const UpdateForm = props => {
+    console.log('upd ', props.movie);
+    // const {movieList, setMovieList } = props
     const { push } = useHistory();
-    const [item, setItem] = useState(initialItem);
     const { id } = useParams();
+    const [item, setItem] = useState(initialItem
+    );
     useEffect(() => {
         axios
             .get(`http://localhost:5000/api/movies/${id}`)
             .then(res => {
-                // res.data
                 setItem(res.data);
             })
             .catch(err => console.log(err));
     }, [id]);
 
-    const changeHandler = ev => {
-        ev.persist();
-        let value = ev.target.value;
+    const changeHandler = e => {
+        e.persist();
+        let value = e.target.value;
         setItem({
             ...item,
-            [ev.target.name]: value
+            [e.target.name]: value
         });
     };
 
     const handleSubmit = e => {
         e.preventDefault();
-        // make a PUT request to edit the item
         axios
             .put(`http://localhost:5000/api/movies/${id}`, item)
             .then(res => {
-                // res.data
-                props.setItems(res.data);
-                push(`/item-list/${id}`);
+                console.log('item', item);
+                // setMovie(item)
+                setItem(res.data);
+                push("/");
             })
             .catch(err => console.log(err));
     };
 
     return (
-        <div>
+        <div className={"edit-div"}>
+            <h2>Edit this movie</h2>
             <form onSubmit={handleSubmit}>
+                <h3>Movie Title: </h3>
                 <input
                     type="text"
                     name="title"
                     value={props.title}
                     onChange={changeHandler}
-                />
+                /><h3>Director: </h3>
                 <input
                     type="text"
                     name="director"
                     value={props.director}
                     onChange={changeHandler}
-                />
+                /><h3>Metascore: </h3>
                 <input
                     type="text"
                     name="metascore"
                     value={props.metascore}
                     onChange={changeHandler}
                 />
-                <input
+                {/* <input
                     type="text"
                     name="stars"
                     value={props.stars}
                     onChange={changeHandler}
-                />
-
+                /> */}
+                <button className="form-button">Update</button>
             </form>
         </div>
     )
