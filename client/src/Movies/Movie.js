@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useParams, Route, NavLink, useHistory } from "react-router-dom";
+import { useParams, useHistory } from "react-router-dom";
 import MovieCard from "./MovieCard";
-import UpdateForm from "./UpdateForm";
+// import UpdateForm from "./UpdateForm";
 
 function Movie({ addToSavedList }) {
   const [movie, setMovie] = useState(null);
   const params = useParams();
   const { push } = useHistory();
+  const { id } = useParams();
 
   const fetchMovie = (id) => {
     axios
@@ -28,6 +29,22 @@ function Movie({ addToSavedList }) {
     return <div>Loading movie information...</div>;
   }
 
+  const deleteItem = e => {
+    e.preventDefault();
+    axios
+      .delete(`http://localhost:5000/api/movies/${id}`)
+      .then(res => {
+        // res.data
+        // props.setMovie(res.data);
+        push('/');
+
+        // res.data ==> just the id
+        // const newItems = props.items.filter(v => `${v.id}` !== res.data)
+        // props.setItems(newItems)
+      })
+      .catch(err => console.log(err));
+  };
+
   return (
     <div className="save-wrapper">
       <MovieCard movie={movie} />
@@ -35,6 +52,9 @@ function Movie({ addToSavedList }) {
       <div className="save-button" onClick={saveMovie}>
         Save
       </div>
+      <button className="md-button" onClick={deleteItem}>
+        Delete
+      </button>
       <div className="update-button" 
       onClick={() => push(`/update-movie/${movie.id}`)} >Update
       </div>

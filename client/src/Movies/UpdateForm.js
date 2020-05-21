@@ -21,12 +21,10 @@ const initialItem = {
 
 
 const UpdateForm = props => {
-    console.log('upd ', props.movie);
-    // const {movieList, setMovieList } = props
+    console.log('upd ', props);
     const { push } = useHistory();
     const { id } = useParams();
-    const [item, setItem] = useState(initialItem
-    );
+    const [item, setItem] = useState(initialItem);
     useEffect(() => {
         axios
             .get(`http://localhost:5000/api/movies/${id}`)
@@ -51,8 +49,8 @@ const UpdateForm = props => {
             .put(`http://localhost:5000/api/movies/${id}`, item)
             .then(res => {
                 console.log('item', item);
-                // setMovie(item)
                 setItem(res.data);
+                // props.setMovie(res.data);
                 push("/");
             })
             .catch(err => console.log(err));
